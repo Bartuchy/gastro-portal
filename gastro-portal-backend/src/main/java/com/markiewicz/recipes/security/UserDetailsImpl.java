@@ -20,9 +20,10 @@ public class UserDetailsImpl extends User implements UserDetails {
         this.email = user.getEmail();
         this.password = user.getPassword();
 
-        user
-                .getRole()
-                .forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+//        user
+//                .getRole()
+//                .forEach(role -> authorities.add(new SimpleGrantedAuthority(role.getName())));
+        authorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
     }
 
     @Override
