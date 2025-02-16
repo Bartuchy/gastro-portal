@@ -5,6 +5,7 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/gastro-portal/pom.xml" />
+        <option value="$PROJECT_DIR$/gastro-portal-backend/pom.xml" />
       </list>
     </option>
   </component>
