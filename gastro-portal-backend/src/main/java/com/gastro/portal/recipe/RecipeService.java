@@ -22,17 +22,17 @@ public class RecipeService {
     private final RecipeMapper recipeMapper;
 
     public List<RecipeDto> getAllRecipes() {
-        List<Recipe> recipes = recipeRepository.findAll();
-        return recipes.stream()
+        List<RecipeEntity> recipeEntities = recipeRepository.findAll();
+        return recipeEntities.stream()
                 .map(RecipeDto::new)
                 .toList();
     }
 
     public RecipeDto getRecipeById(Long id) {
-        Recipe recipe = recipeRepository
+        RecipeEntity recipeEntity = recipeRepository
                 .findById(id)
                 .orElseThrow(RecipeNotFoundException::new);
-        return new RecipeDto(recipe);
+        return new RecipeDto(recipeEntity);
     }
 
     public List<RecipeDto> getRecipesAddedByUser(String username) {
@@ -45,7 +45,7 @@ public class RecipeService {
 
     }
 
-    public List<Recipe> getRecipesWithNameOrFromCategory(String name, String category) {
+    public List<RecipeEntity> getRecipesWithNameOrFromCategory(String name, String category) {
         if (name == null ^ category == null) {
             if (name != null) {
                 return recipeRepository
@@ -59,55 +59,55 @@ public class RecipeService {
         throw new RecipeNotFoundException();
     }
 
-    public Recipe addNewRecipe(CreateRecipeDto createRecipeDto) {
-        Recipe recipe = recipeMapper.createRecipeDtoToRecipeEntity(createRecipeDto);
-        return recipeRepository.save(recipe);
+    public RecipeEntity addNewRecipe(CreateRecipeDto createRecipeDto) {
+        RecipeEntity recipeEntity = recipeMapper.createRecipeDtoToRecipeEntity(createRecipeDto);
+        return recipeRepository.save(recipeEntity);
     }
 
     @Transactional
-    public void updateRecipe(Long id, Recipe recipe) {
-        Recipe updatedRecipe = recipeRepository
+    public void updateRecipe(Long id, RecipeEntity recipeEntity) {
+        RecipeEntity updatedRecipeEntity = recipeRepository
                 .findById(id)
                 .orElseThrow(RecipeNotFoundException::new);
 
-        if (checkCompatibility(updatedRecipe)) {
-            updateRecipeFields(updatedRecipe, recipe);
+        if (checkCompatibility(updatedRecipeEntity)) {
+            updateRecipeFields(updatedRecipeEntity, recipeEntity);
         } else {
             throw new ForbiddenException();
         }
     }
 
-    private void updateRecipeFields(Recipe updatedRecipe, Recipe recipe) {
-        updatedRecipe.setName(recipe.getName());
-        updatedRecipe.setCategory(recipe.getCategory());
-        updatedRecipe.setDescription(recipe.getDescription());
-        updatedRecipe.setIngredients(recipe.getIngredients());
-        updatedRecipe.setDirections(recipe.getDirections());
-        updatedRecipe.setDate(LocalDateTime.now());
+    private void updateRecipeFields(RecipeEntity updatedRecipeEntity, RecipeEntity recipeEntity) {
+        updatedRecipeEntity.setName(recipeEntity.getName());
+        updatedRecipeEntity.setCategory(recipeEntity.getCategory());
+        updatedRecipeEntity.setDescription(recipeEntity.getDescription());
+        updatedRecipeEntity.setIngredients(recipeEntity.getIngredients());
+        updatedRecipeEntity.setDirections(recipeEntity.getDirections());
+        updatedRecipeEntity.setDate(LocalDateTime.now());
     }
 
     public void removeRecipeById(Long id) {
-        Recipe recipe = recipeRepository
+        RecipeEntity recipeEntity = recipeRepository
                 .findById(id)
                 .orElseThrow(RecipeNotFoundException::new);
 
-        if (checkCompatibility(recipe)) {
-            recipeRepository.delete(recipe);
+        if (checkCompatibility(recipeEntity)) {
+            recipeRepository.delete(recipeEntity);
         } else {
             throw new ForbiddenException();
         }
     }
 
-    private boolean checkCompatibility(Recipe recipe) {
+    private boolean checkCompatibility(RecipeEntity recipeEntity) {
         Long loggedInUserId = userService.getLoggedInUser().getId();
-        Long recipeAuthorId = recipe.getUser().getId();
+        Long recipeAuthorId = recipeEntity.getUserEntity().getId();
         return Objects.equals(loggedInUserId, recipeAuthorId);
     }
 
     public List<String> getAllCategories() {
         return recipeRepository.findAll()
                 .stream()
-                .map(Recipe::getCategory)
+                .map(RecipeEntity::getCategory)
                 .toList();
     }
 }

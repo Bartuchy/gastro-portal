@@ -1,7 +1,7 @@
 package com.gastro.portal.recipe;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.gastro.portal.user.User;
+import com.gastro.portal.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,8 +12,9 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Recipe {
+@Entity(name = "Recipe")
+@Table(name = "recipe")
+public class RecipeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -37,10 +38,11 @@ public class Recipe {
     private String directions;
 
     @ManyToOne
-    @JsonIgnoreProperties(value="recipes")
-    private User user;
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties(value="recipeEntities")
+    private UserEntity userEntity;
 
-    public Recipe(String name, String category, String description, String ingredients, String directions) {
+    public RecipeEntity(String name, String category, String description, String ingredients, String directions) {
         this.name = name;
         this.category = category;
         this.description = description;

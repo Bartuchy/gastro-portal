@@ -1,12 +1,12 @@
 package com.gastro.portal.user.auth;
 
+import com.gastro.portal.user.UserEntity;
 import com.gastro.portal.user.auth.dto.AuthenticationRequest;
 import com.gastro.portal.user.auth.dto.AuthenticationResponse;
 import com.gastro.portal.user.auth.dto.RegisterRequestDto;
 import com.gastro.portal.user.auth.dto.RegisterResponseDto;
 import com.gastro.portal.config.QRCodeGenerator;
 import com.gastro.portal.config.mailing.token.ConfirmationTokenService;
-import com.gastro.portal.user.User;
 import com.gastro.portal.user.UserService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -47,17 +47,17 @@ public class AuthenticationController {
             @RequestParam String confirmationToken
     ) throws UnsupportedEncodingException {
         authenticationService.confirmRegistration(confirmationToken);
-        User user = confirmationTokenService.getUserByToken(confirmationToken);
+        UserEntity userEntity = confirmationTokenService.getUserByToken(confirmationToken);
 
         RegisterResponseDto registerResponseDto =
-                new RegisterResponseDto(user.getIsUsing2FA(), qrCodeGenerator.generateQRUrl(user));
+                new RegisterResponseDto(userEntity.getIsUsing2FA(), qrCodeGenerator.generateQRUrl(userEntity));
         return ResponseEntity.ok(registerResponseDto);
     }
 
     @GetMapping("/{email}/qr-code")
     public ResponseEntity<String> getGrCodeForUser(@PathVariable String email) throws UnsupportedEncodingException {
-        User user = userService.getUserByEmail(email);
-        String qrCodeLink = qrCodeGenerator.generateQRUrl(user);
+        UserEntity userEntity = userService.getUserByEmail(email);
+        String qrCodeLink = qrCodeGenerator.generateQRUrl(userEntity);
         return ResponseEntity.ok(qrCodeLink);
     }
 }

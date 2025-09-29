@@ -14,12 +14,12 @@ public class UserFactory {
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
-    public User createUser(RegisterRequestDto request) {
-        return User.builder()
+    public UserEntity createUser(RegisterRequestDto request) {
+        return UserEntity.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(roleService.getRoleByName(USER))
+                .roleEntity(roleService.getRoleByName(USER))
                 .isUsing2FA(request.getUsing2FA())
                 .build();
     }

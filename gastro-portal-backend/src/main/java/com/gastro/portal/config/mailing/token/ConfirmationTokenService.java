@@ -1,6 +1,6 @@
 package com.gastro.portal.config.mailing.token;
 
-import com.gastro.portal.user.User;
+import com.gastro.portal.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +24,7 @@ public class ConfirmationTokenService {
     public void setConfirmedAt(String token) {
         confirmationTokenRepository.updateConfirmedAt(token, Instant.now());
     }
-    public User getUserByToken(String token) {
+    public UserEntity getUserByToken(String token) {
         return confirmationTokenRepository.findUserByToken(token).orElseThrow();
     }
 }

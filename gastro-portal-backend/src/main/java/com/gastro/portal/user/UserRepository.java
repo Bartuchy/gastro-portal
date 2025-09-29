@@ -7,19 +7,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE User u SET u.isEnabled = TRUE WHERE u.email = ?1")
+    @Query("UPDATE User u SET u.isEnabled = TRUE WHERE u.email = :email")
     void enableUser(String email);
 
     @Transactional
     @Modifying
-    @Query("UPDATE User u SET u.isNonLocked = TRUE WHERE u.email = ?1")
+    @Query("UPDATE User u SET u.isNonLocked = TRUE WHERE u.email = :email")
     void unlockAccount(String email);
 
-    Optional<User> findByEmail(String email);
+    Optional<UserEntity> findByEmail(String email);
 
     @Transactional
     @Modifying
@@ -27,7 +27,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     void updateUser2FA();
 
 
-    Optional<User> findUserByEmail(String email);
+    Optional<UserEntity> findUserByEmail(String email);
 
-    Optional<User> findByUsername(String username);
+    Optional<UserEntity> findByUsername(String username);
 }

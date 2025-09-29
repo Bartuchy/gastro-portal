@@ -1,5 +1,6 @@
 package com.gastro.portal.user;
 
+import com.gastro.portal.user.dto.UserInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,9 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<User>> getAllUsers() {
-        List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+    public ResponseEntity<List<UserInfoDto>> getAllUsers() {
+        List<UserInfoDto> userInfos = userService.getAllUsers();
+        return ResponseEntity.ok(userInfos);
     }
 
 

@@ -1,7 +1,7 @@
 package com.gastro.portal.user;
 
-import com.gastro.portal.recipe.Recipe;
-import com.gastro.portal.role.Role;
+import com.gastro.portal.recipe.RecipeEntity;
+import com.gastro.portal.role.RoleEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.jboss.aerogear.security.otp.api.Base32;
@@ -18,9 +18,9 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Entity(name = "User")
 @Table(name = "users")
-public class User implements UserDetails {
+public class UserEntity implements UserDetails {
 
     @Id
     @GeneratedValue
@@ -33,16 +33,17 @@ public class User implements UserDetails {
     private Boolean isUsing2FA = false;
     private String secret = Base32.random();
 
-    @OneToMany(mappedBy = "user")
-    private List<Recipe> recipes = new ArrayList<>();
+    @OneToMany(mappedBy = "userEntity")
+    private List<RecipeEntity> recipeEntities = new ArrayList<>();
 
 
-    @ManyToOne(targetEntity = Role.class)
-    private Role role;
+    @ManyToOne(targetEntity = RoleEntity.class)
+    @JoinColumn(name = "role_id")
+    private RoleEntity roleEntity;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.getName()));
+        return List.of(new SimpleGrantedAuthority(roleEntity.getName()));
     }
 
     @Override

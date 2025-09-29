@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 public class RoleService {
     private final RoleRepository roleRepository;
 
-    public Role getRoleByName(String name) {
+    public RoleEntity getRoleByName(String name) {
         return roleRepository.findRoleByName(name);
     }
 }

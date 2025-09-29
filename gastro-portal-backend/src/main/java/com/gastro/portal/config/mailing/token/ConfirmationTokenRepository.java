@@ -1,7 +1,7 @@
 package com.gastro.portal.config.mailing.token;
 
 
-import com.gastro.portal.user.User;
+import com.gastro.portal.user.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,7 +19,7 @@ public interface ConfirmationTokenRepository
     Optional<ConfirmationToken> findByToken(String token);
 
     @Query("select u from User u where u.id = (select token.id from ConfirmationToken token where token.token = ?1)")
-    Optional<User> findUserByToken(String token);
+    Optional<UserEntity> findUserByToken(String token);
 
     @Transactional
     @Modifying

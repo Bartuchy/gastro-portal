@@ -36,20 +36,20 @@ public class RecipeController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Recipe>> getRecipesWithNameOrFromCategory(@Nullable @RequestParam String name, @Nullable @RequestParam String category) {
-        List<Recipe> recipes = recipeService.getRecipesWithNameOrFromCategory(name, category);
-        return ResponseEntity.ok(recipes);
+    public ResponseEntity<List<RecipeEntity>> getRecipesWithNameOrFromCategory(@Nullable @RequestParam String name, @Nullable @RequestParam String category) {
+        List<RecipeEntity> recipeEntities = recipeService.getRecipesWithNameOrFromCategory(name, category);
+        return ResponseEntity.ok(recipeEntities);
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Recipe> addNewRecipe(@RequestBody CreateRecipeDto createRecipeDto) {
-        Recipe addedRecipe = recipeService.addNewRecipe(createRecipeDto);
-        return new ResponseEntity<>(addedRecipe, HttpStatus.CREATED);
+    public ResponseEntity<RecipeEntity> addNewRecipe(@RequestBody CreateRecipeDto createRecipeDto) {
+        RecipeEntity addedRecipeEntity = recipeService.addNewRecipe(createRecipeDto);
+        return new ResponseEntity<>(addedRecipeEntity, HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Void> updateRecipe(@PathVariable Long id, @RequestBody Recipe recipe) {
-        recipeService.updateRecipe(id, recipe);
+    public ResponseEntity<Void> updateRecipe(@PathVariable Long id, @RequestBody RecipeEntity recipeEntity) {
+        recipeService.updateRecipe(id, recipeEntity);
         return ResponseEntity.accepted().build();
     }
 

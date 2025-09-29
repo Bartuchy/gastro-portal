@@ -1,7 +1,7 @@
 package com.gastro.portal.recipe.dto;
 
 
-import com.gastro.portal.recipe.Recipe;
+import com.gastro.portal.recipe.RecipeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -19,14 +19,14 @@ public class RecipeDto {
     private String directions;
     private String userName;
 
-    public RecipeDto(Recipe recipe) {
-        this.id = recipe.getId();
-        this.additionDate = recipe.getDate();
-        this.name = recipe.getName();
-        this.category = recipe.getCategory();
-        this.description = recipe.getDescription();
-        this.ingredients = recipe.getIngredients();
-        this.directions = recipe.getDirections();
-        this.userName = recipe.getUser().getEmail();
+    public RecipeDto(RecipeEntity recipeEntity) {
+        this.id = recipeEntity.getId();
+        this.additionDate = recipeEntity.getDate();
+        this.name = recipeEntity.getName();
+        this.category = recipeEntity.getCategory();
+        this.description = recipeEntity.getDescription();
+        this.ingredients = recipeEntity.getIngredients();
+        this.directions = recipeEntity.getDirections();
+        this.userName = recipeEntity.getUserEntity().getEmail();
     }
 }

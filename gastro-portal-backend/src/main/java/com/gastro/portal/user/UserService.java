@@ -1,5 +1,7 @@
 package com.gastro.portal.user;
 
+import com.gastro.portal.user.dto.UserInfoDto;
+import com.gastro.portal.user.mapper.UserMapperFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final UserMapperFacade userMapperFacade;
 
     public void enableUser(String email) {
         userRepository.enableUser(email);
@@ -22,23 +25,23 @@ public class UserService {
         userRepository.unlockAccount(email);
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserInfoDto> getAllUsers() {
+        return userRepository.findAll().stream().map(userMapperFacade::toUserInfoDto).toList();
     }
 
-    public User getUserByEmail(String email) {
+    public UserEntity getUserByEmail(String email) {
         return userRepository.findUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException(
                 String.format("User with email %s not found", email)
         ));
     }
 
-    public Optional<User> getUSerOptByEmail(String email) {
+    public Optional<UserEntity> getUSerOptByEmail(String email) {
         return userRepository.findUserByEmail(email);
     }
 
     public void updateUser2FA(String email, boolean using2FA) {
         Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
-        User currentUser = (User) curAuth.getPrincipal();
+        UserEntity currentUserEntity = (UserEntity) curAuth.getPrincipal();
         userRepository.updateUser2FA();
     }
 
@@ -51,11 +54,11 @@ public class UserService {
                 .getIsUsing2FA();
     }
 
-    public void saveGeneratedQrCode(User user) {
-        userRepository.save(user);
+    public void saveGeneratedQrCode(UserEntity userEntity) {
+        userRepository.save(userEntity);
     }
 
-    public User getLoggedInUser() {
+    public UserEntity getLoggedInUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();
         return getUserByEmail(email);

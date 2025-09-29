@@ -1,6 +1,6 @@
 package com.gastro.portal.user.auth;
 
-import com.gastro.portal.user.User;
+import com.gastro.portal.user.UserEntity;
 import com.gastro.portal.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.jboss.aerogear.security.otp.Totp;
@@ -19,11 +19,11 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
         String verificationCode
                 = ((CustomUsernamePasswordAuthenticationToken) auth)
                 .getVerificationCode();
-        User user = userRepository.findByEmail(auth.getName())
+        UserEntity userEntity = userRepository.findByEmail(auth.getName())
                 .orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
 
-        if (user.getIsUsing2FA()) {
-            Totp totp = new Totp(user.getSecret());
+        if (userEntity.getIsUsing2FA()) {
+            Totp totp = new Totp(userEntity.getSecret());
             if (!isValidLong(verificationCode) || !totp.verify(verificationCode)) {
                 throw new BadCredentialsException("Invalid verification code");
             }
@@ -31,7 +31,7 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
 
         Authentication result = super.authenticate(auth);
         return new CustomUsernamePasswordAuthenticationToken(
-                user, result.getCredentials(), verificationCode, result.getAuthorities());
+                userEntity, result.getCredentials(), verificationCode, result.getAuthorities());
     }
 
     private boolean isValidLong(String code) {

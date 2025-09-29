@@ -1,6 +1,6 @@
 package com.gastro.portal.config.mailing.token;
 
-import com.gastro.portal.user.User;
+import com.gastro.portal.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,5 +29,6 @@ public class ConfirmationToken {
     private Instant confirmedAt;
 
     @ManyToOne
-    private User user;
+//    @JoinColumn(name = "user_id")
+    private UserEntity userEntity;
 }

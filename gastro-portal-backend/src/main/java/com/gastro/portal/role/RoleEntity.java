@@ -1,6 +1,6 @@
 package com.gastro.portal.role;
 
-import com.gastro.portal.user.User;
+import com.gastro.portal.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,15 +13,16 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Role {
+@Entity(name = "Role")
+@Table(name = "role")
+public class RoleEntity {
 
     @Id
     @GeneratedValue
     private Long id;
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "id")
-    private List<User> users;
+    @OneToMany(mappedBy = "roleEntity", fetch = FetchType.LAZY)
+    private List<UserEntity> userEntities;
 }
 

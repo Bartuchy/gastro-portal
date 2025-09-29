@@ -1,0 +1,4 @@
+GET localhost:8080/api/recipeEntity/all
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiYXJ0ZWttYXJrMDBAZ21haWwuY29tIiwiaWF0IjoxNzU4ODEyMzg2LCJleHAiOjE3NTg4MjY3ODZ9.mdsrnAjzJSeap7LjMo7jQchYjjsiMXlZZS_nQnwa8Hw
+
+###

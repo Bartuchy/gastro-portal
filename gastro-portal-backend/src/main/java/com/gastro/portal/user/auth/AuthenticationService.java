@@ -1,5 +1,6 @@
 package com.gastro.portal.user.auth;
 
+import com.gastro.portal.user.UserEntity;
 import com.gastro.portal.user.auth.dto.AuthenticationRequest;
 import com.gastro.portal.user.auth.dto.AuthenticationResponse;
 import com.gastro.portal.user.auth.dto.RegisterRequestDto;
@@ -12,10 +13,9 @@ import com.gastro.portal.config.mailing.token.ConfirmationTokenService;
 import com.gastro.portal.config.security.jwt.JwtService;
 import com.gastro.portal.user.auth.exception.UserExistsException;
 import com.gastro.portal.user.auth.exception.UserNotFoundException;
-import com.gastro.portal.user.User;
 import com.gastro.portal.user.UserRepository;
 import com.gastro.portal.user.UserService;
-import com.gastro.portal.user.mapper.UserMapper;
+import com.gastro.portal.user.mapper.UserMapperFacade;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,27 +38,27 @@ public class AuthenticationService {
     private final EmailFactory emailFactory;
     private final ConfirmationTokenService confirmationTokenService;
     private final ConfirmationTokenFactory confirmationTokenFactory;
-    private final UserMapper userMapper;
+    private final UserMapperFacade userMapperFacade;
     private final UserService userService;
 
 
     @Transactional
     public void register(RegisterRequestDto request) throws IOException, MessagingException {
-        User user = userMapper.registerRequestDtoToUserEntity(request);
-        Optional<User> existingUser = userService.getUSerOptByEmail(request.getEmail());
+        UserEntity userEntity = userMapperFacade.toUserEntity(request);
+        Optional<UserEntity> existingUser = userService.getUSerOptByEmail(request.getEmail());
         if (existingUser.isPresent()) {
             throw new UserExistsException(request);
         }
 
-        userRepository.save(user);
+        userRepository.save(userEntity);
 
-        ConfirmationToken confirmationToken = confirmationTokenFactory.createConfirmationToken(user);
+        ConfirmationToken confirmationToken = confirmationTokenFactory.createConfirmationToken(userEntity);
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        Email email = emailFactory.createConfirmationEmail(request.getEmail(), user.getUsername(), confirmationToken.getToken());
+        Email email = emailFactory.createConfirmationEmail(request.getEmail(), userEntity.getUsername(), confirmationToken.getToken());
         emailSender.sendMail(email);
 
-        log.info("User {} registered", user.getEmail());
+        log.info("User {} registered", userEntity.getEmail());
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -70,16 +70,16 @@ public class AuthenticationService {
                 )
         );
 
-        User user = userRepository.findByEmail(request.getEmail())
+        UserEntity userEntity = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(UserNotFoundException::new);
 
-        String jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(userEntity);
 
-        log.info("User {} authenticated", user.getEmail());
+        log.info("User {} authenticated", userEntity.getEmail());
         return AuthenticationResponse.builder()
                 .authenticationToken(jwtToken)
                 .email(request.getEmail())
-                .username(user.getEmail())
+                .username(userEntity.getEmail())
                 .build();
     }
 
@@ -97,10 +97,10 @@ public class AuthenticationService {
         }
 
         confirmationTokenService.setConfirmedAt(token);
-        userService.enableUser(confirmationToken.getUser().getEmail());
-        userService.unlockAccount(confirmationToken.getUser().getEmail());
+        userService.enableUser(confirmationToken.getUserEntity().getEmail());
+        userService.unlockAccount(confirmationToken.getUserEntity().getEmail());
 
-        log.info("User {} confirmed registration", confirmationToken.getUser().getEmail());
+        log.info("User {} confirmed registration", confirmationToken.getUserEntity().getEmail());
     }
 
 
