@@ -1,4 +1,4 @@
-package com.gastro.portal.config.mailing;
+package com.gastro.portal.mailing;
 
 import com.gastro.portal.common.ResourceReader;
 import lombok.RequiredArgsConstructor;

@@ -12,10 +12,10 @@ public class SecurityUtil {
     };
 
     public static final String[] USER_PATHS = new String[] {
-            "/api/demo-controller/user"
+            "/api/v1/demo-controller/user"
     };
 
     public static final String[] ADMIN_PATHS = new String[] {
-            "/api/demo-controller/admin"
+            "/api/v1/demo-controller/admin"
     };
 }

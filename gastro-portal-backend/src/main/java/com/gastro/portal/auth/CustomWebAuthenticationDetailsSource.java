@@ -1,4 +1,4 @@
-package com.gastro.portal.user.auth;
+package com.gastro.portal.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.security.authentication.AuthenticationDetailsSource;

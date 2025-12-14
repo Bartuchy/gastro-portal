@@ -11,10 +11,10 @@ public class UserEntityToUserInfoDto implements Mapper<UserEntity, UserInfoDto> 
     public UserInfoDto map(UserEntity userEntity) {
         return UserInfoDto.builder()
                 .id(userEntity.getId())
-                .username(userEntity.getUsername())
-                .email(userEntity.getEmail())
+                .username(userEntity.getNickname())
+                .email(userEntity.getUsername())
                 .password(userEntity.getPassword())
-                .isEnabled(userEntity.isEnabled())
+                .isEnabled(userEntity.getIsEnabled())
                 .isNonLocked(userEntity.getIsNonLocked())
                 .isUsing2FA(userEntity.getIsUsing2FA())
                 .build();

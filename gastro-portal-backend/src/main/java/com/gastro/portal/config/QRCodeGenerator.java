@@ -15,6 +15,6 @@ public class QRCodeGenerator {
     public String generateQRUrl(UserEntity userEntity) throws UnsupportedEncodingException {
         return QR_PREFIX + URLEncoder.encode(String.format(
                 "otpauth://totp/%s:%s?secret=%s&issuer=%s",
-                APP_NAME, userEntity.getEmail(), userEntity.getSecret(), APP_NAME), "UTF-8");
+                APP_NAME, userEntity.getUsername(), userEntity.getSecret(), APP_NAME), "UTF-8");
     }
 }

@@ -11,23 +11,21 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     @Transactional
     @Modifying
-    @Query("UPDATE User u SET u.isEnabled = TRUE WHERE u.email = :email")
+    @Query("UPDATE User u SET u.isEnabled = TRUE WHERE u.username = :email")
     void enableUser(String email);
 
     @Transactional
     @Modifying
-    @Query("UPDATE User u SET u.isNonLocked = TRUE WHERE u.email = :email")
+    @Query("UPDATE User u SET u.isNonLocked = TRUE WHERE u.username = :email")
     void unlockAccount(String email);
-
-    Optional<UserEntity> findByEmail(String email);
 
     @Transactional
     @Modifying
-    @Query("UPDATE User u SET u.isUsing2FA = TRUE WHERE u.email = ?1")
+    @Query("UPDATE User u SET u.isUsing2FA = TRUE WHERE u.username = ?1")
     void updateUser2FA();
 
 
-    Optional<UserEntity> findUserByEmail(String email);
+    Optional<UserEntity> findUserByUsername(String username);
 
-    Optional<UserEntity> findByUsername(String username);
+    Optional<UserEntity> findByNickname(String nickname);
 }

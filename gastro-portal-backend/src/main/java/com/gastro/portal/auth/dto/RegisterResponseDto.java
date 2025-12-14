@@ -1,4 +1,4 @@
-package com.gastro.portal.user.auth.dto;
+package com.gastro.portal.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

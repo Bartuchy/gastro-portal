@@ -1,8 +1,8 @@
 package com.gastro.portal.config.security.jwt;
 
-import com.gastro.portal.user.auth.CustomUsernamePasswordAuthenticationToken;
-import com.gastro.portal.user.auth.CustomWebAuthenticationDetails;
-import com.gastro.portal.user.auth.CustomWebAuthenticationDetailsSource;
+import com.gastro.portal.auth.CustomUsernamePasswordAuthenticationToken;
+import com.gastro.portal.auth.CustomWebAuthenticationDetails;
+import com.gastro.portal.auth.CustomWebAuthenticationDetailsSource;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

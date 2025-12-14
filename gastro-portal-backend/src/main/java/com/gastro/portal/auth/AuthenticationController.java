@@ -1,12 +1,12 @@
-package com.gastro.portal.user.auth;
+package com.gastro.portal.auth;
 
 import com.gastro.portal.user.UserEntity;
-import com.gastro.portal.user.auth.dto.AuthenticationRequest;
-import com.gastro.portal.user.auth.dto.AuthenticationResponse;
-import com.gastro.portal.user.auth.dto.RegisterRequestDto;
-import com.gastro.portal.user.auth.dto.RegisterResponseDto;
+import com.gastro.portal.auth.dto.AuthenticationRequest;
+import com.gastro.portal.auth.dto.AuthenticationResponse;
+import com.gastro.portal.auth.dto.RegisterRequestDto;
+import com.gastro.portal.auth.dto.RegisterResponseDto;
 import com.gastro.portal.config.QRCodeGenerator;
-import com.gastro.portal.config.mailing.token.ConfirmationTokenService;
+import com.gastro.portal.mailing.token.ConfirmationTokenService;
 import com.gastro.portal.user.UserService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;

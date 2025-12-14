@@ -1,4 +1,4 @@
-package com.gastro.portal.user.auth;
+package com.gastro.portal.auth;
 
 import lombok.Getter;
 import lombok.Setter;

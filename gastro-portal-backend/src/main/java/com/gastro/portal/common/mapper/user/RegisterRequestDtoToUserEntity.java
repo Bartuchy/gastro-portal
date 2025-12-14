@@ -1,9 +1,9 @@
-package com.gastro.portal.user.mapper;
+package com.gastro.portal.common.mapper.user;
 
+import com.gastro.portal.auth.dto.RegisterRequestDto;
 import com.gastro.portal.common.mapper.Mapper;
-import com.gastro.portal.user.UserEntity;
-import com.gastro.portal.user.auth.dto.RegisterRequestDto;
 import com.gastro.portal.role.RoleService;
+import com.gastro.portal.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.jboss.aerogear.security.otp.api.Base32;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,8 +20,8 @@ public class RegisterRequestDtoToUserEntity implements Mapper<RegisterRequestDto
     @Override
     public UserEntity map(RegisterRequestDto registerRequestDto) {
         return UserEntity.builder()
-                .username(registerRequestDto.getUsername())
-                .email(registerRequestDto.getEmail())
+                .nickname(registerRequestDto.getUsername())
+                .username(registerRequestDto.getEmail())
                 .password(passwordEncoder.encode(registerRequestDto.getPassword()))
                 .roleEntity(roleService.getRoleByName(USER))
                 .isUsing2FA(registerRequestDto.getUsing2FA())

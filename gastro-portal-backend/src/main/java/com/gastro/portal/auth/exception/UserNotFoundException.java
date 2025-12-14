@@ -1,4 +1,4 @@
-package com.gastro.portal.user.auth.exception;
+package com.gastro.portal.auth.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

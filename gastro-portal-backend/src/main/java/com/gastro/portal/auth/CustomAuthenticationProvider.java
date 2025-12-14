@@ -1,4 +1,4 @@
-package com.gastro.portal.user.auth;
+package com.gastro.portal.auth;
 
 import com.gastro.portal.user.UserEntity;
 import com.gastro.portal.user.UserRepository;
@@ -19,7 +19,7 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
         String verificationCode
                 = ((CustomUsernamePasswordAuthenticationToken) auth)
                 .getVerificationCode();
-        UserEntity userEntity = userRepository.findByEmail(auth.getName())
+        UserEntity userEntity = userRepository.findUserByUsername(auth.getName())
                 .orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
 
         if (userEntity.getIsUsing2FA()) {

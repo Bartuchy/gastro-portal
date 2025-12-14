@@ -1,5 +1,4 @@
-package com.gastro.portal.user.auth.dto;
-
+package com.gastro.portal.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthenticationResponse {
-    private String authenticationToken;
+public class AuthenticationRequest {
     private String email;
-    private String username;
+    private String password;
+    private String verificationCode;
 }

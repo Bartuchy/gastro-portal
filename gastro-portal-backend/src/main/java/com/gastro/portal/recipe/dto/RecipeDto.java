@@ -27,6 +27,6 @@ public class RecipeDto {
         this.description = recipeEntity.getDescription();
         this.ingredients = recipeEntity.getIngredients();
         this.directions = recipeEntity.getDirections();
-        this.userName = recipeEntity.getUserEntity().getEmail();
+        this.userName = recipeEntity.getUserEntity().getUsername();
     }
 }

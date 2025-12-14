@@ -1,4 +1,4 @@
-package com.gastro.portal.config.mailing.token;
+package com.gastro.portal.mailing.token;
 
 
 import com.gastro.portal.user.UserEntity;

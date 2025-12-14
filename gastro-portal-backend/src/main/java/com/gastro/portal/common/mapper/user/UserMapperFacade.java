@@ -1,8 +1,8 @@
-package com.gastro.portal.user.mapper;
+package com.gastro.portal.common.mapper.user;
 
+import com.gastro.portal.auth.dto.RegisterRequestDto;
 import com.gastro.portal.common.mapper.Mapper;
 import com.gastro.portal.user.UserEntity;
-import com.gastro.portal.user.auth.dto.RegisterRequestDto;
 import com.gastro.portal.user.dto.UserInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

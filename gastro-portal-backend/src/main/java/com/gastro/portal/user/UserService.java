@@ -1,7 +1,7 @@
 package com.gastro.portal.user;
 
+import com.gastro.portal.common.mapper.user.UserMapperFacade;
 import com.gastro.portal.user.dto.UserInfoDto;
-import com.gastro.portal.user.mapper.UserMapperFacade;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,13 +30,13 @@ public class UserService {
     }
 
     public UserEntity getUserByEmail(String email) {
-        return userRepository.findUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException(
+        return userRepository.findUserByUsername(email).orElseThrow(() -> new UsernameNotFoundException(
                 String.format("User with email %s not found", email)
         ));
     }
 
     public Optional<UserEntity> getUSerOptByEmail(String email) {
-        return userRepository.findUserByEmail(email);
+        return userRepository.findUserByUsername(email);
     }
 
     public void updateUser2FA(String email, boolean using2FA) {
@@ -47,7 +47,7 @@ public class UserService {
 
     public boolean isUserUsing2FA(String email) {
         return userRepository
-                .findUserByEmail(email)
+                .findUserByUsername(email)
                 .orElseThrow(() -> new UsernameNotFoundException(
                         String.format("User with email %s not found", email)
                 ))

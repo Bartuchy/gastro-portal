@@ -9,4 +9,14 @@ Content-Type: application/json
 ###
 
 GET http://localhost:8080/user/all
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiYXJ0ZWttYXJrMDBAZ21haWwuY29tIiwiaWF0IjoxNzU5MTcxNDg3LCJleHAiOjE3NTkxODU4ODd9.aSwpe1uC9IyGvfPVEqqJlKwgJzdDLcfd0K8IubmBP9s
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiYXJ0ZWttYXJrMDBAZ21haWwuY29tIiwiaWF0IjoxNzY1MjE3Mjk3LCJleHAiOjE3NjUyMzE2OTd9.Ngo_67GXiXR48H57BoHJPGWaXYvtb8MYsie-fcXxxLs
+
+###
+
+GET http://localhost:8080/api/v1/demo-controller/user
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiYXJ0ZWttYXJrMDBAZ21haWwuY29tIiwiaWF0IjoxNzY1MjE3Mjk3LCJleHAiOjE3NjUyMzE2OTd9.Ngo_67GXiXR48H57BoHJPGWaXYvtb8MYsie-fcXxxLs
+
+###
+
+GET http://localhost:8080/api/v1/demo-controller/admin
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiYXJ0ZWttYXJrMDBAZ21haWwuY29tIiwiaWF0IjoxNzY1MjE3Mjk3LCJleHAiOjE3NjUyMzE2OTd9.Ngo_67GXiXR48H57BoHJPGWaXYvtb8MYsie-fcXxxLs
