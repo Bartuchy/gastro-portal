@@ -1,5 +1,6 @@
 package com.gastro.portal.user;
 
+import com.gastro.portal.account.UserAccountEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,29 +8,29 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-public record UserPrincipal(UserEntity user) implements UserDetails {
+public record UserPrincipal(UserAccountEntity userAccount) implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(user.getRoleEntity().getName()));
+        return List.of(new SimpleGrantedAuthority(userAccount.getRole().getName()));
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return userAccount.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return userAccount.getUsername();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return user.getIsNonLocked();
+        return userAccount.getIsNonLocked();
     }
 
     @Override
     public boolean isEnabled() {
-        return user.getIsEnabled();
+        return userAccount.getIsEnabled();
     }
 }

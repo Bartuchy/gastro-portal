@@ -1,6 +1,5 @@
 package com.gastro.portal.recipe;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gastro.portal.user.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -39,8 +38,7 @@ public class RecipeEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties(value="recipeEntities")
-    private UserEntity userEntity;
+    private UserEntity author;
 
     public RecipeEntity(String name, String category, String description, String ingredients, String directions) {
         this.name = name;

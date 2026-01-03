@@ -1,13 +1,13 @@
 package com.gastro.portal.auth;
 
-import com.gastro.portal.user.UserEntity;
+import com.gastro.portal.account.UserAccountEntity;
+import com.gastro.portal.account.UserAccountService;
 import com.gastro.portal.auth.dto.AuthenticationRequest;
 import com.gastro.portal.auth.dto.AuthenticationResponse;
 import com.gastro.portal.auth.dto.RegisterRequestDto;
 import com.gastro.portal.auth.dto.RegisterResponseDto;
 import com.gastro.portal.config.QRCodeGenerator;
 import com.gastro.portal.mailing.token.ConfirmationTokenService;
-import com.gastro.portal.user.UserService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +24,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     private final ConfirmationTokenService confirmationTokenService;
     private final QRCodeGenerator qrCodeGenerator;
-    private final UserService userService;
+    private final UserAccountService userAccountService;
 
     @PostMapping("register")
     public ResponseEntity<Void> register(
@@ -47,17 +47,17 @@ public class AuthenticationController {
             @RequestParam String confirmationToken
     ) throws UnsupportedEncodingException {
         authenticationService.confirmRegistration(confirmationToken);
-        UserEntity userEntity = confirmationTokenService.getUserByToken(confirmationToken);
+        UserAccountEntity userAccountEntity = confirmationTokenService.getUserAccountByToken(confirmationToken);
 
         RegisterResponseDto registerResponseDto =
-                new RegisterResponseDto(userEntity.getIsUsing2FA(), qrCodeGenerator.generateQRUrl(userEntity));
+                new RegisterResponseDto(userAccountEntity.getIsUsing2FA(), qrCodeGenerator.generateQRUrl(userAccountEntity));
         return ResponseEntity.ok(registerResponseDto);
     }
 
     @GetMapping("/{email}/qr-code")
     public ResponseEntity<String> getGrCodeForUser(@PathVariable String email) throws UnsupportedEncodingException {
-        UserEntity userEntity = userService.getUserByEmail(email);
-        String qrCodeLink = qrCodeGenerator.generateQRUrl(userEntity);
+        UserAccountEntity userAccountEntity = userAccountService.getUserAccountEntityByUsername(email);
+        String qrCodeLink = qrCodeGenerator.generateQRUrl(userAccountEntity);
         return ResponseEntity.ok(qrCodeLink);
     }
 }

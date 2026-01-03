@@ -1,6 +1,7 @@
 package com.gastro.portal.user;
 
-import com.gastro.portal.common.mapper.user.UserMapperFacade;
+import com.gastro.portal.account.UserAccountRepository;
+import com.gastro.portal.user.mapper.UserMapper;
 import com.gastro.portal.user.dto.UserInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -15,18 +16,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
-    private final UserMapperFacade userMapperFacade;
+    private final UserAccountRepository userAccountRepository;
+    private final UserMapper userMapper;
 
-    public void enableUser(String email) {
-        userRepository.enableUser(email);
-    }
-
-    public void unlockAccount(String email) {
-        userRepository.unlockAccount(email);
-    }
 
     public List<UserInfoDto> getAllUsers() {
-        return userRepository.findAll().stream().map(userMapperFacade::toUserInfoDto).toList();
+        return userRepository.findAll().stream().map(userMapper::fromUserEntityToUserInfoDto).toList();
     }
 
     public UserEntity getUserByEmail(String email) {
@@ -42,16 +37,7 @@ public class UserService {
     public void updateUser2FA(String email, boolean using2FA) {
         Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
         UserEntity currentUserEntity = (UserEntity) curAuth.getPrincipal();
-        userRepository.updateUser2FA();
-    }
-
-    public boolean isUserUsing2FA(String email) {
-        return userRepository
-                .findUserByUsername(email)
-                .orElseThrow(() -> new UsernameNotFoundException(
-                        String.format("User with email %s not found", email)
-                ))
-                .getIsUsing2FA();
+        userAccountRepository.updateUser2FA();
     }
 
     public void saveGeneratedQrCode(UserEntity userEntity) {

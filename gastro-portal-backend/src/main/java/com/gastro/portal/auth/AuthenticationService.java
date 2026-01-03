@@ -1,22 +1,23 @@
 package com.gastro.portal.auth;
 
-import com.gastro.portal.common.mapper.user.UserMapperFacade;
-import com.gastro.portal.user.UserEntity;
+import com.gastro.portal.account.UserAccountRepository;
+import com.gastro.portal.admin.AdminService;
 import com.gastro.portal.auth.dto.AuthenticationRequest;
 import com.gastro.portal.auth.dto.AuthenticationResponse;
 import com.gastro.portal.auth.dto.RegisterRequestDto;
+import com.gastro.portal.auth.exception.UserNotFoundException;
+import com.gastro.portal.auth.mapper.RegistrationRequestMapper;
+import com.gastro.portal.auth.mapper.UserAccountUserAggregate;
+import com.gastro.portal.auth.validator.RegistrationValidator;
+import com.gastro.portal.config.security.jwt.JwtService;
 import com.gastro.portal.mailing.Email;
 import com.gastro.portal.mailing.EmailFactory;
 import com.gastro.portal.mailing.EmailSender;
 import com.gastro.portal.mailing.token.ConfirmationToken;
 import com.gastro.portal.mailing.token.ConfirmationTokenFactory;
 import com.gastro.portal.mailing.token.ConfirmationTokenService;
-import com.gastro.portal.config.security.jwt.JwtService;
-import com.gastro.portal.auth.exception.UserExistsException;
-import com.gastro.portal.auth.exception.UserNotFoundException;
 import com.gastro.portal.user.UserPrincipal;
 import com.gastro.portal.user.UserRepository;
-import com.gastro.portal.user.UserService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -39,27 +39,27 @@ public class AuthenticationService {
     private final EmailFactory emailFactory;
     private final ConfirmationTokenService confirmationTokenService;
     private final ConfirmationTokenFactory confirmationTokenFactory;
-    private final UserMapperFacade userMapperFacade;
-    private final UserService userService;
+    private final UserAccountRepository userAccountRepository;
+    private final AdminService adminService;
+    private final RegistrationValidator registrationValidator;
+    private final RegistrationRequestMapper registrationRequestMapper;
 
 
     @Transactional
     public void register(RegisterRequestDto request) throws IOException, MessagingException {
-        UserEntity userEntity = userMapperFacade.toUserEntity(request);
-        Optional<UserEntity> existingUser = userService.getUSerOptByEmail(request.getEmail());
-        if (existingUser.isPresent()) {
-            throw new UserExistsException(request);
-        }
+        registrationValidator.assertRegistrationDataValidation(request);
 
-        userRepository.save(userEntity);
+        UserAccountUserAggregate aggregate = registrationRequestMapper.mapFrom(request);
+        userRepository.save(aggregate.user());
+        userAccountRepository.save(aggregate.userAccount());
 
-        ConfirmationToken confirmationToken = confirmationTokenFactory.createConfirmationToken(userEntity);
+        ConfirmationToken confirmationToken = confirmationTokenFactory.createConfirmationToken(aggregate.userAccount());
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        Email email = emailFactory.createConfirmationEmail(request.getEmail(), userEntity.getNickname(), confirmationToken.getToken());
+        Email email = emailFactory.createConfirmationEmail(request.getDisplayName(), aggregate.user().getDisplayName(), confirmationToken.getToken());
         emailSender.sendMail(email);
 
-        log.info("User {} registered", userEntity.getUsername());
+        log.info("User {} registered", aggregate.user().getDisplayName());
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -71,17 +71,17 @@ public class AuthenticationService {
                 )
         );
 
-        UserPrincipal userPrincipal = userRepository.findUserByUsername(request.getEmail())
+        UserPrincipal userPrincipal = userAccountRepository.findUserAccountEntityByUsername(request.getEmail())
                 .map(UserPrincipal::new)
                 .orElseThrow(UserNotFoundException::new);
 
         String jwtToken = jwtService.generateToken(userPrincipal);
 
-        log.info("User {} authenticated", userPrincipal.user().getUsername());
+        log.info("User {} authenticated", userPrincipal.userAccount().getUsername());
         return AuthenticationResponse.builder()
                 .authenticationToken(jwtToken)
                 .email(request.getEmail())
-                .username(userPrincipal.user().getUsername())
+                .username(userPrincipal.userAccount().getUsername())
                 .build();
     }
 
@@ -99,10 +99,10 @@ public class AuthenticationService {
         }
 
         confirmationTokenService.setConfirmedAt(token);
-        userService.enableUser(confirmationToken.getUserEntity().getUsername());
-        userService.unlockAccount(confirmationToken.getUserEntity().getUsername());
+        adminService.enableUser(confirmationToken.getUserAccount().getUsername());
+        adminService.unlockAccount(confirmationToken.getUserAccount().getUsername());
 
-        log.info("User {} confirmed registration", confirmationToken.getUserEntity().getUsername());
+        log.info("User {} confirmed registration", confirmationToken.getUserAccount().getUsername());
     }
 
 

@@ -1,6 +1,6 @@
 package com.gastro.portal.role;
 
-import com.gastro.portal.user.UserEntity;
+import com.gastro.portal.account.UserAccountEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,11 +18,13 @@ import java.util.List;
 public class RoleEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false, unique = true, length = 50)
     private String name;
 
-    @OneToMany(mappedBy = "roleEntity", fetch = FetchType.LAZY)
-    private List<UserEntity> userEntities;
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
+    private List<UserAccountEntity> userAccounts;
 }
 

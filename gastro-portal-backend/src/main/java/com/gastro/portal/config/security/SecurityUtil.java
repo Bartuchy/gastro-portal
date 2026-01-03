@@ -8,11 +8,11 @@ public class SecurityUtil {
             "/api/auth/**",
             "/api/demo-controller/test",
             "/api/auth/{email}/qr-code",
-            "/user/{email}/using2fa"
+            "/userAccount/{email}/using2fa"
     };
 
     public static final String[] USER_PATHS = new String[] {
-            "/api/v1/demo-controller/user"
+            "/api/v1/demo-controller/userAccount"
     };
 
     public static final String[] ADMIN_PATHS = new String[] {

@@ -1,9 +1,9 @@
 package com.gastro.portal.config;
 
+import com.gastro.portal.account.UserAccountRepository;
 import com.gastro.portal.auth.CustomAuthenticationProvider;
 import com.gastro.portal.auth.CustomWebAuthenticationDetailsSource;
 import com.gastro.portal.user.UserPrincipal;
-import com.gastro.portal.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,11 +19,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @RequiredArgsConstructor
 public class ApplicationConfig {
 
-    private final UserRepository repository;
+    private final UserAccountRepository repository;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> repository.findUserByUsername(username)
+        return username -> repository.findUserAccountEntityByUsername(username)
                 .map(UserPrincipal::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }

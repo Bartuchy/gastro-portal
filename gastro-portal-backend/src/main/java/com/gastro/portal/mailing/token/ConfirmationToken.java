@@ -1,6 +1,6 @@
 package com.gastro.portal.mailing.token;
 
-import com.gastro.portal.user.UserEntity;
+import com.gastro.portal.account.UserAccountEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,6 +12,9 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "confirmation_token",
+        indexes = @Index(name = "idx_confirmation_token_token", columnList = "token"),
+        uniqueConstraints = @UniqueConstraint(name = "uk_confirmation_token_token", columnNames = "token"))
 public class ConfirmationToken {
     @Id
     @GeneratedValue
@@ -29,6 +32,6 @@ public class ConfirmationToken {
     private Instant confirmedAt;
 
     @ManyToOne
-//    @JoinColumn(name = "user_id")
-    private UserEntity userEntity;
+    @JoinColumn(name = "user_account_id")
+    private UserAccountEntity userAccount;
 }

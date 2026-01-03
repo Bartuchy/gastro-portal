@@ -1,7 +1,7 @@
 package com.gastro.portal.auth;
 
-import com.gastro.portal.user.UserEntity;
-import com.gastro.portal.user.UserRepository;
+import com.gastro.portal.account.UserAccountEntity;
+import com.gastro.portal.account.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.jboss.aerogear.security.otp.Totp;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -11,7 +11,7 @@ import org.springframework.security.core.AuthenticationException;
 
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
-    private final UserRepository userRepository;
+    private final UserAccountRepository userAccountRepository;
 
     @Override
     public Authentication authenticate(Authentication auth)
@@ -19,11 +19,11 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
         String verificationCode
                 = ((CustomUsernamePasswordAuthenticationToken) auth)
                 .getVerificationCode();
-        UserEntity userEntity = userRepository.findUserByUsername(auth.getName())
+        UserAccountEntity userAccountEntity = userAccountRepository.findUserAccountEntityByUsername(auth.getName())
                 .orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
 
-        if (userEntity.getIsUsing2FA()) {
-            Totp totp = new Totp(userEntity.getSecret());
+        if (userAccountEntity.getIsUsing2FA()) {
+            Totp totp = new Totp(userAccountEntity.getSecret());
             if (!isValidLong(verificationCode) || !totp.verify(verificationCode)) {
                 throw new BadCredentialsException("Invalid verification code");
             }
@@ -31,7 +31,7 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
 
         Authentication result = super.authenticate(auth);
         return new CustomUsernamePasswordAuthenticationToken(
-                userEntity, result.getCredentials(), verificationCode, result.getAuthorities());
+                userAccountEntity, result.getCredentials(), verificationCode, result.getAuthorities());
     }
 
     private boolean isValidLong(String code) {

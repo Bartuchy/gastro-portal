@@ -16,6 +16,6 @@ public interface RecipeRepository extends JpaRepository<RecipeEntity, Long>{
     @Query("select r from Recipe r where lower(r.category) like lower(concat('%',:category, '%')) order by r.date desc")
     Optional<List<RecipeEntity>> findByCategoryContainingIgnoreCaseOrderByDateDesc(String category);
 
-    @Query("select r from Recipe r where r.userEntity.nickname=:nickname order by r.date desc")
+    @Query("select r from Recipe r where r.author.displayName=:nickname order by r.date desc")
     Optional<List<RecipeEntity>> findRecipesAddedByUser(String nickname);
 }

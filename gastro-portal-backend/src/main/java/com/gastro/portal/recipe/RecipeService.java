@@ -100,7 +100,7 @@ public class RecipeService {
 
     private boolean checkCompatibility(RecipeEntity recipeEntity) {
         Long loggedInUserId = userService.getLoggedInUser().getId();
-        Long recipeAuthorId = recipeEntity.getUserEntity().getId();
+        Long recipeAuthorId = recipeEntity.getAuthor().getId();
         return Objects.equals(loggedInUserId, recipeAuthorId);
     }
 

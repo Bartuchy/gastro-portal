@@ -20,12 +20,6 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("{email}/using2fa")
-    public ResponseEntity<Boolean> isUserUsing2FA(@PathVariable String email) {
-        boolean using2FA = userService.isUserUsing2FA(email);
-        return ResponseEntity.ok(using2FA);
-    }
-
     @GetMapping("/all")
     public ResponseEntity<List<UserInfoDto>> getAllUsers() {
         List<UserInfoDto> userInfos = userService.getAllUsers();

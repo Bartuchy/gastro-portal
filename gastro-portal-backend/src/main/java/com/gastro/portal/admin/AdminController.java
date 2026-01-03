@@ -1,5 +1,6 @@
-package com.gastro.portal.user;
+package com.gastro.portal.admin;
 
+import com.gastro.portal.user.UserService;
 import com.gastro.portal.user.dto.UserInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

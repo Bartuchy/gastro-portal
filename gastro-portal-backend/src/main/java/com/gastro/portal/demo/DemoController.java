@@ -16,7 +16,7 @@ public class DemoController {
 
     @GetMapping("/user")
     public ResponseEntity<String> sayHelloUser() {
-        return ResponseEntity.ok("Hello from secured endpoint user");
+        return ResponseEntity.ok("Hello from secured endpoint userAccount");
     }
 
 }

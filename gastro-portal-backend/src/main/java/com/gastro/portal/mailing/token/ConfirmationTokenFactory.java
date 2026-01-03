@@ -1,6 +1,6 @@
 package com.gastro.portal.mailing.token;
 
-import com.gastro.portal.user.UserEntity;
+import com.gastro.portal.account.UserAccountEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -11,14 +11,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class ConfirmationTokenFactory {
 
-    public ConfirmationToken createConfirmationToken(UserEntity userEntity) {
+    public ConfirmationToken createConfirmationToken(UserAccountEntity userAccountEntity) {
         String token = UUID.randomUUID().toString();
 
         return ConfirmationToken.builder()
                 .token(token)
                 .createdAt(Instant.now())
                 .expiresAt(Instant.now().plusSeconds(900))
-                .userEntity(userEntity)
+                .userAccount(userAccountEntity)
                 .build();
     }
 }
