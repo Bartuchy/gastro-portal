@@ -24,7 +24,15 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> repository.findUserAccountEntityByUsername(username)
-                .map(UserPrincipal::new)
+                .map(userAccount -> new UserPrincipal(
+                        userAccount.getId(),
+                        userAccount.getUser().getId(),
+                        userAccount.getUsername(),
+                        userAccount.getPassword(),
+                        Boolean.TRUE.equals(userAccount.getIsEnabled()),
+                        Boolean.TRUE.equals(userAccount.getIsNonLocked()),
+                        userAccount.getRole().getName()
+                ))
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 

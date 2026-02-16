@@ -21,7 +21,7 @@ public class RecipeMapper {
                 .description(createRecipeDto.getDescription())
                 .ingredients(createRecipeDto.getIngredients())
                 .directions(createRecipeDto.getDirections())
-                .userEntity(userService.getLoggedInUser())
+                .author(userService.getLoggedInUser())
                 .build();
     }
 }

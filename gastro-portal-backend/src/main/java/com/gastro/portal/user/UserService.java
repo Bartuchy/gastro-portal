@@ -25,19 +25,9 @@ public class UserService {
     }
 
     public UserEntity getUserByEmail(String email) {
-        return userRepository.findUserByUsername(email).orElseThrow(() -> new UsernameNotFoundException(
+        return userRepository.findUserByDisplayName(email).orElseThrow(() -> new UsernameNotFoundException(
                 String.format("User with email %s not found", email)
         ));
-    }
-
-    public Optional<UserEntity> getUSerOptByEmail(String email) {
-        return userRepository.findUserByUsername(email);
-    }
-
-    public void updateUser2FA(String email, boolean using2FA) {
-        Authentication curAuth = SecurityContextHolder.getContext().getAuthentication();
-        UserEntity currentUserEntity = (UserEntity) curAuth.getPrincipal();
-        userAccountRepository.updateUser2FA();
     }
 
     public void saveGeneratedQrCode(UserEntity userEntity) {

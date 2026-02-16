@@ -72,16 +72,24 @@ public class AuthenticationService {
         );
 
         UserPrincipal userPrincipal = userAccountRepository.findUserAccountEntityByUsername(request.getEmail())
-                .map(UserPrincipal::new)
+                .map(userAccount -> new UserPrincipal(
+                        userAccount.getId(),
+                        userAccount.getUser().getId(),
+                        userAccount.getUsername(),
+                        userAccount.getPassword(),
+                        Boolean.TRUE.equals(userAccount.getIsEnabled()),
+                        Boolean.TRUE.equals(userAccount.getIsNonLocked()),
+                        userAccount.getRole().getName()
+                ))
                 .orElseThrow(UserNotFoundException::new);
 
         String jwtToken = jwtService.generateToken(userPrincipal);
 
-        log.info("User {} authenticated", userPrincipal.userAccount().getUsername());
+        log.info("User {} authenticated", userPrincipal.getUsername());
         return AuthenticationResponse.builder()
                 .authenticationToken(jwtToken)
                 .email(request.getEmail())
-                .username(userPrincipal.userAccount().getUsername())
+                .username(userPrincipal.getUsername())
                 .build();
     }
 

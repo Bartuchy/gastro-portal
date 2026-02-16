@@ -26,6 +26,12 @@ public interface UserAccountRepository extends JpaRepository<UserAccountEntity, 
     @Query("UPDATE UserAccount ua SET ua.isUsing2FA = TRUE WHERE ua.username = ?1")
     void updateUser2FA();
 
+    @Query("""
+           select ua from UserAccount ua
+           join fetch ua.role
+           join fetch ua.user
+           where ua.username = :username
+           """)
     Optional<UserAccountEntity> findUserAccountEntityByUsername(String username);
 
     boolean existsUserAccountEntityByUsernameIgnoreCase(String username);

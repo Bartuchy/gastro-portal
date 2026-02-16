@@ -14,12 +14,6 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("{email}/update/2fa")
-    public ResponseEntity<Void> modifyUser2FA(@PathVariable String email) {
-        userService.updateUser2FA(email, false);
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping("/all")
     public ResponseEntity<List<UserInfoDto>> getAllUsers() {
         List<UserInfoDto> userInfos = userService.getAllUsers();
